@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project>
+    <Projectname>hellworld.sln</Projectname>
+    <User>host_user</User>
+    <Password>host_password</Password>
+    <Host>host_ip</Host>
+    <Port>host_ssh_port</Port>
+    <Localdir>D:\github\projsync\example\hellworld</Localdir>
+    <Remotedir>/data/home/${User}/project/hellworld</Remotedir>
+    <SvnUser>svnuser</SvnUser>
+    <SvnPassword>svnpasswd</SvnPassword>
+    
+	<TaskList>
+	    <Task>
+            <TaskName>syncbuildexecute</TaskName>
+            <TaskPrinter>yes</TaskPrinter>
+            <AutoDoTaskCircle>0</AutoDoTaskCircle> <!--minute-->
+            <CmdList>
+                <Cmd>
+                    <CmdName>winscp</CmdName>
+                    <StepList>
+					    <Step>
+                            <StepName>call</StepName>
+                            <ShellCmdList>
+                                <ShellCmd>mkdir -p ${Remotedir}</ShellCmd>
+                            </ShellCmdList>
+                        </Step>
+                        <Step>
+                            <StepName>sync</StepName>
+                            <SyncDirection>local2remote</SyncDirection>
+							<ExcludeList>
+								<Exclude>.vs\</Exclude>
+								<Exclude>*.sln</Exclude>
+								<Exclude>*.vcxproj</Exclude>
+								<Exclude>*.vcxproj.filters</Exclude>
+								<Exclude>*.vcxproj.user</Exclude>
+							</ExcludeList>							
+                        </Step>
+				        <Step>
+                            <StepName>call</StepName>
+                            <ShellCmdList>
+                                <ShellCmd>cd ${Remotedir}</ShellCmd>
+								<ShellCmd>gcc -o hellworld hellworld.cpp</ShellCmd>
+								<ShellCmd>./hellworld</ShellCmd>
+                            </ShellCmdList>
+                        </Step>
+                    </StepList>
+                </Cmd>
+            </CmdList>
+        </Task>
+		
+	</TaskList>
+</Project>
+
